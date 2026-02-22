@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-# Smart_placement_prep_portal
-A full-stack web portal that helps students prepare for campus placements through aptitude practice, coding challenges, performance tracking, and personalized learning insights.
-=======
 # Smart Placement Prep Portal
 Full-stack web portal that helps students prepare for campus placements through aptitude practice, coding challenges, performance tracking, and personalized learning insights.
 
@@ -47,9 +43,9 @@ npm install
 2) Configure environment variables
 Create a `.env` file in `server/` with:
 ```
-DATABASE_URL="..."
-    DATABASE_DIRECT_URL="..."
-    JWT_SECRET="..."
+PORT=5000
+JWT_SECRET=replace_me
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
 ```
 
 3) Initialize database (Prisma)
@@ -88,4 +84,3 @@ The client uses the API base URL set in [client/src/services/api.js](client/src/
 
 ## License
 TBD
->>>>>>> Stashed changes
