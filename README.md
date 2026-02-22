@@ -23,7 +23,14 @@ Smart_placement_prep_portal/
 ### Prerequisites
 - Node.js 18+ and npm
 - PostgreSQL database
+### Installation
 
+1.  **Clone the repository:**
+
+    ```bash
+    git clone <repository-url>
+    cd Smart_placement_prep_portal
+    ```
 ### Setup
 1) Install dependencies
 ```
