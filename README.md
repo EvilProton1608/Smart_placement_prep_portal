@@ -43,9 +43,9 @@ npm install
 2) Configure environment variables
 Create a `.env` file in `server/` with:
 ```
-PORT=5000
-JWT_SECRET=replace_me
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
+DATABASE_URL="..."
+DATABASE_DIRECT_URL="..."
+JWT_SECRET="..."
 ```
 
 3) Initialize database (Prisma)
