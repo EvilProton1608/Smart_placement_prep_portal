@@ -26,9 +26,11 @@ app.get("/", (req, res) => {
 ==============================
 */
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/oauth", require("./routes/oauthRoutes"));
 app.use("/api/user", require("./routes/userRoutes"));
 app.use("/api/quiz", require("./routes/quizRoutes"));
 app.use("/api/coding", require("./routes/codingRoutes"));
+app.use("/api/questions", require("./routes/questionRoutes"));
 app.use("/api/resume", require("./routes/resumeRoutes"));
 app.use("/api/tests", require("./routes/testRoutes"));
 

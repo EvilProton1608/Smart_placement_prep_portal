@@ -1,0 +1,498 @@
+/* Coding Page Container */
+.coding-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.coding-container {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  gap: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+  height: calc(100vh - 100px);
+}
+
+/* Sidebar - Problems List */
+.problems-sidebar {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.problems-sidebar h2 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.problems-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.problem-item {
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.problem-item:hover {
+  border-color: #3b82f6;
+  background: #f0f7ff;
+}
+
+.problem-item.active {
+  border-color: #3b82f6;
+  background: #3b82f6;
+  color: white;
+}
+
+.problem-title {
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.difficulty {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.difficulty.easy {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.problem-item.active .difficulty.easy {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.difficulty.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.problem-item.active .difficulty.medium {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.difficulty.hard {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.problem-item.active .difficulty.hard {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Main Content Area */
+.coding-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Problem Section */
+.problem-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.problem-section h1 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.problem-section .description {
+  margin: 0 0 16px 0;
+  color: #666;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.problem-section .example {
+  background: #f9f9f9;
+  padding: 12px;
+  border-left: 4px solid #3b82f6;
+  border-radius: 4px;
+}
+
+.problem-section .example strong {
+  color: #333;
+}
+
+.problem-section pre {
+  margin: 8px 0 0 0;
+  color: #666;
+  font-size: 13px;
+  font-family: 'Fira Code', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Editor Section */
+.editor-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.editor-section .code-editor-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Submissions Sidebar */
+.submissions-sidebar {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.submissions-sidebar h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.submission-item {
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border-left: 4px solid #10b981;
+}
+
+.submission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.question-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+}
+
+.language-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.submission-time {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Results Section */
+.results-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.results-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.results-summary {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.result-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.result-badge.pass {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.result-badge.fail {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.result-badge.error {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.result-badge.timeout {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 200px;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 6px;
+  border-left: 4px solid;
+  background: #f9f9f9;
+  align-items: start;
+}
+
+.result-item.pass {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.result-item.fail {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.result-item.error {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.result-item.timeout {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+}
+
+.result-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.result-status.pass {
+  color: #10b981;
+}
+
+.result-status.fail {
+  color: #ef4444;
+}
+
+.result-status.error {
+  color: #f59e0b;
+}
+
+.result-status.timeout {
+  color: #8b5cf6;
+}
+
+.status-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-case {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.result-case strong {
+  color: #333;
+  font-size: 14px;
+}
+
+.result-case p {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.result-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 8px;
+}
+
+.detail-row .label {
+  font-weight: 600;
+  color: #666;
+}
+
+.detail-row .value {
+  color: #333;
+  font-family: 'Fira Code', monospace;
+  word-break: break-all;
+  padding: 6px 10px;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.detail-row .error-msg {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fecaca;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+  line-height: 1.4;
+  border: 2px solid #fecaca;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .coding-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .problems-sidebar,
+  .submissions-sidebar {
+    display: none;
+  }
+
+  .problem-section {
+    max-height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .coding-page {
+    padding: 10px;
+  }
+
+  .coding-container {
+    height: auto;
+  }
+
+  .problem-section {
+    max-height: none;
+  }
+
+  .editor-section {
+    min-height: 400px;
+  }
+
+  .result-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .results-summary {
+    width: 100%;
+  }
+}
+
+/* Scrollbar styling */
+.problems-sidebar::-webkit-scrollbar,
+.submissions-sidebar::-webkit-scrollbar,
+.problem-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.problems-sidebar::-webkit-scrollbar-track,
+.submissions-sidebar::-webkit-scrollbar-track,
+.problem-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.problems-sidebar::-webkit-scrollbar-thumb,
+.submissions-sidebar::-webkit-scrollbar-thumb,
+.problem-section::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.problems-sidebar::-webkit-scrollbar-thumb:hover,
+.submissions-sidebar::-webkit-scrollbar-thumb:hover,
+.problem-section::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

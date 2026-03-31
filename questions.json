@@ -1,0 +1,77 @@
+[
+  {
+    "title": "Two Sum",
+    "difficulty": "Easy",
+    "description": "Find two numbers that add up to a target",
+    "type": "coding",
+    "topic": "Array",
+    "example": "Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]",
+    "testCases": [
+      {
+        "input": "nums = [2,7,11,15]; target = 9",
+        "expectedOutput": "[0,1]",
+        "description": "Basic case"
+      },
+      {
+        "input": "nums = [3,2,4]; target = 6",
+        "expectedOutput": "[1,2]",
+        "description": "Another case"
+      },
+      {
+        "input": "nums = [3,3]; target = 6",
+        "expectedOutput": "[0,1]",
+        "description": "Duplicate numbers"
+      }
+    ]
+  },
+  {
+    "title": "Reverse String",
+    "difficulty": "Easy",
+    "description": "Reverse a string in place",
+    "type": "coding",
+    "topic": "String",
+    "example": "Input: \"hello\"\nOutput: \"olleh\"",
+    "testCases": [
+      {
+        "input": "s = \"hello\"",
+        "expectedOutput": "\"olleh\"",
+        "description": "Basic string"
+      },
+      {
+        "input": "s = \"\"",
+        "expectedOutput": "\"\"",
+        "description": "Empty string"
+      },
+      {
+        "input": "s = \"a\"",
+        "expectedOutput": "\"a\"",
+        "description": "Single character"
+      }
+    ]
+  },
+  {
+    "title": "Valid Parentheses",
+    "difficulty": "Medium",
+    "description": "Check if parentheses are valid",
+    "type": "coding",
+    "topic": "Stack",
+    "example": "Input: \"()[]{}\"\nOutput: true",
+    "testCases": [
+      {
+        "input": "s = \"()\"",
+        "expectedOutput": "true",
+        "description": "Valid simple"
+      },
+      {
+        "input": "s = \"()[]{}\n\"",
+        "expectedOutput": "true",
+        "description": "Multiple types"
+      },
+      {
+        "input": "s = \"(]\"",
+        "expectedOutput": "false",
+        "description": "Invalid"
+      }
+    ]
+  }
+]
