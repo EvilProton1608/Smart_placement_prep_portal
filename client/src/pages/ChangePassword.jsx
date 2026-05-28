@@ -74,7 +74,7 @@ export default function ChangePassword() {
         }
       );
 
-      setSuccess('✅ Password changed successfully!');
+      setSuccess('Password changed successfully!');
       setTimeout(() => {
         navigate('/profile');
       }, 1500);
@@ -90,13 +90,13 @@ export default function ChangePassword() {
     <div className="profile-page">
       <div className="profile-container">
         <div className="page-header">
-          <h1>🔐 Change Password</h1>
+          <h1>Change Password</h1>
           <button
             type="button"
             className="btn-back"
             onClick={() => navigate('/profile')}
           >
-            ← Back
+            Back
           </button>
         </div>
 
@@ -175,7 +175,7 @@ export default function ChangePassword() {
               className="btn btn-primary"
               disabled={submitting}
             >
-              {submitting ? '🔄 Updating...' : '✓ Change Password'}
+              {submitting ? 'Updating...' : 'Change Password'}
             </button>
             <button
               type="button"
@@ -183,7 +183,7 @@ export default function ChangePassword() {
               onClick={() => navigate('/profile')}
               disabled={submitting}
             >
-              ✕ Cancel
+              Cancel
             </button>
           </div>
         </form>

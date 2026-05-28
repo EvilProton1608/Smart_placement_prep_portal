@@ -33,6 +33,7 @@ app.use("/api/coding", require("./routes/codingRoutes"));
 app.use("/api/questions", require("./routes/questionRoutes"));
 app.use("/api/resume", require("./routes/resumeRoutes"));
 app.use("/api/tests", require("./routes/testRoutes"));
+app.use("/api/test", require("./routes/testRoutes"));
 
 /*
 ==============================

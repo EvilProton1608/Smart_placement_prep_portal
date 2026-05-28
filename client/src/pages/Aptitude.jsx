@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Aptitude.css';
 
 export default function AptitudePage() {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -39,6 +41,8 @@ export default function AptitudePage() {
   }, []);
 
   const currentQuestion = questions.find(q => q.id === selectedQuestion);
+  const isCurrentAnswered = answeredQuestions.has(selectedQuestion);
+  const canFinish = questions.length > 0 && answeredQuestions.size === questions.length;
 
   const handleSelectQuestion = (questionId) => {
     setSelectedQuestion(questionId);
@@ -62,12 +66,17 @@ export default function AptitudePage() {
 
     try {
       setIsSubmitting(true);
+      const token = localStorage.getItem('token');
       const response = await axios.post(
         'http://localhost:5000/api/questions/aptitude/submit',
         {
           questionId: selectedQuestion,
-          selectedAnswer: currentQuestion.options[selectedAnswer],
-          userId: localStorage.getItem('userId') // Optional: for tracking user attempts
+          selectedAnswer: currentQuestion.options[selectedAnswer]
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       );
 
@@ -96,6 +105,12 @@ export default function AptitudePage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleFinishTest = () => {
+    if (!canFinish) return;
+    alert(`Test finished. Score: ${score}/${questions.length}`);
+    navigate('/dashboard');
   };
 
   return (
@@ -130,7 +145,7 @@ export default function AptitudePage() {
                       <span className={`difficulty ${q.difficulty?.toLowerCase() || 'medium'}`}>
                         {q.difficulty}
                       </span>
-                      {answeredQuestions.has(q.id) && <span className="answered-badge">✓</span>}
+                      {answeredQuestions.has(q.id) && <span className="answered-badge">Done</span>}
                     </div>
                   </div>
                 </div>
@@ -199,12 +214,10 @@ export default function AptitudePage() {
                   <div className="feedback-header">
                     {feedback.isCorrect ? (
                       <>
-                        <span className="feedback-icon">✓</span>
                         <span className="feedback-title">Correct!</span>
                       </>
                     ) : (
                       <>
-                        <span className="feedback-icon">✗</span>
                         <span className="feedback-title">Incorrect</span>
                       </>
                     )}
@@ -221,9 +234,9 @@ export default function AptitudePage() {
                 </div>
               )}
 
-              {/* Submit Button */}
-              {!answeredQuestions.has(selectedQuestion) && (
-                <div className="submit-section">
+              {/* Sticky Actions */}
+              <div className="aptitude-actions" aria-label="Aptitude actions">
+                {!isCurrentAnswered ? (
                   <button
                     className="submit-btn"
                     onClick={handleSubmitAnswer}
@@ -231,38 +244,44 @@ export default function AptitudePage() {
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit Answer'}
                   </button>
-                </div>
-              )}
+                ) : (
+                  <>
+                    <button
+                      className="nav-btn prev"
+                      onClick={() => {
+                        const currentIdx = questions.findIndex(q => q.id === selectedQuestion);
+                        if (currentIdx > 0) {
+                          handleSelectQuestion(questions[currentIdx - 1].id);
+                        }
+                      }}
+                      disabled={questions.findIndex(q => q.id === selectedQuestion) === 0}
+                    >
+                      Previous
+                    </button>
+                    <button
+                      className="nav-btn next"
+                      onClick={() => {
+                        const currentIdx = questions.findIndex(q => q.id === selectedQuestion);
+                        if (currentIdx < questions.length - 1) {
+                          handleSelectQuestion(questions[currentIdx + 1].id);
+                        }
+                      }}
+                      disabled={questions.findIndex(q => q.id === selectedQuestion) === questions.length - 1}
+                    >
+                      Next
+                    </button>
+                  </>
+                )}
 
-              {/* Navigation */}
-              {answeredQuestions.has(selectedQuestion) && (
-                <div className="navigation-section">
-                  <button
-                    className="nav-btn prev"
-                    onClick={() => {
-                      const currentIdx = questions.findIndex(q => q.id === selectedQuestion);
-                      if (currentIdx > 0) {
-                        handleSelectQuestion(questions[currentIdx - 1].id);
-                      }
-                    }}
-                    disabled={questions.findIndex(q => q.id === selectedQuestion) === 0}
-                  >
-                    ← Previous
-                  </button>
-                  <button
-                    className="nav-btn next"
-                    onClick={() => {
-                      const currentIdx = questions.findIndex(q => q.id === selectedQuestion);
-                      if (currentIdx < questions.length - 1) {
-                        handleSelectQuestion(questions[currentIdx + 1].id);
-                      }
-                    }}
-                    disabled={questions.findIndex(q => q.id === selectedQuestion) === questions.length - 1}
-                  >
-                    Next →
-                  </button>
-                </div>
-              )}
+                <button
+                  className="finish-btn"
+                  onClick={handleFinishTest}
+                  disabled={!canFinish}
+                  title={canFinish ? 'Finish the test' : 'Answer all questions to finish'}
+                >
+                  Finish Test
+                </button>
+              </div>
             </>
           ) : null}
         </div>

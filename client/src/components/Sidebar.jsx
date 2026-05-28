@@ -7,13 +7,13 @@ export default function Sidebar({ isOpen = false, toggle }) {
   const [collapsed, setCollapsed] = useState(false);
 
   const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/coding', label: 'Coding', icon: '💻' },
-    { path: '/aptitude', label: 'Aptitude', icon: '📝' },
-    { path: '/mocktest', label: 'Mock Tests', icon: '🎯' },
-    { path: '/analytics', label: 'Analytics', icon: '📈' },
-    { path: '/profile', label: 'Profile', icon: '👤' },
-    { path: '/resume-analyzer', label: 'Resume', icon: '📄' },
+    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/coding', label: 'Coding' },
+    { path: '/aptitude', label: 'Aptitude' },
+    { path: '/mocktest', label: 'Mock Tests'},
+    { path: '/analytics', label: 'Analytics' },
+    { path: '/profile', label: 'Profile' },
+    { path: '/resume-analyzer', label: 'Resume' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen = false, toggle }) {
         onClick={toggle}
         title="Close Sidebar"
       >
-        ✕
+        Close
       </button>
 
       {/* Collapse Button */}
@@ -42,7 +42,7 @@ export default function Sidebar({ isOpen = false, toggle }) {
         onClick={() => setCollapsed(!collapsed)}
         title={collapsed ? 'Expand' : 'Collapse'}
       >
-        {collapsed ? '→' : '←'}
+        {collapsed ? 'Expand' : 'Collapse'}
       </button>
 
       {/* Sidebar Header */}
@@ -70,9 +70,9 @@ export default function Sidebar({ isOpen = false, toggle }) {
       {/* Sidebar Footer */}
       <div className="sidebar-footer">
         <div className="footer-tip">
-          <span className="tip-icon">💡</span>
+          <span className="tip-icon"></span>
           <span className="tip-text">
-            {collapsed ? '💡' : 'Practice daily for better results!'}
+            {collapsed ? '': 'Practice daily for better results!'}
           </span>
         </div>
       </div>

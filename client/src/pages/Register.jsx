@@ -65,7 +65,7 @@ export default function Register() {
 
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
-        setSuccess("✓ Registration successful! Redirecting...");
+        setSuccess("Registration successful! Redirecting...");
         setForm({ name: "", email: "", password: "" });
 
         setTimeout(() => {
@@ -79,7 +79,7 @@ export default function Register() {
         err.response?.data?.error ||
         err.message ||
         "Registration failed. Please try again.";
-      setError(`❌ ${errorMessage}`);
+      setError(` ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ export default function Register() {
 
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
-        setSuccess("✓ Google login successful! Redirecting...");
+        setSuccess("Google login successful! Redirecting...");
 
         setTimeout(() => {
           navigate("/");
@@ -108,14 +108,14 @@ export default function Register() {
       console.error("Google auth error:", err);
       const errorMessage =
         err.response?.data?.message || "Google authentication failed";
-      setError(`❌ ${errorMessage}`);
+      setError(` ${errorMessage}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    setError("❌ Google login failed");
+    setError("Google login failed");
   };
 
   const handleGitHubLogin = () => {

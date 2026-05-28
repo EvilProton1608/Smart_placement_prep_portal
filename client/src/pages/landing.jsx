@@ -6,37 +6,31 @@ export default function Landing() {
 
   const features = [
     {
-      icon: '💻',
       title: 'Coding Practice',
       description: 'Master DSA and coding problems with our extensive database. Practice problems from top companies including LeetCode problems.',
       gradient: 'gradient-1'
     },
     {
-      icon: '📊',
       title: 'Aptitude Tests',
       description: 'Comprehensive aptitude tests covering quantitative, logical reasoning, and verbal ability sections.',
       gradient: 'gradient-2'
     },
     {
-      icon: '🎯',
       title: 'Mock Tests',
       description: 'Real-time mock tests that simulate actual placement exams. Get instant feedback and detailed analytics.',
       gradient: 'gradient-3'
     },
     {
-      icon: '❓',
       title: 'Quiz Mode',
       description: 'Quick quizzes to test your knowledge on various topics. Perfect for daily practice and revision.',
       gradient: 'gradient-4'
     },
     {
-      icon: '📈',
       title: 'Performance Analytics',
       description: 'Track your progress with detailed analytics, charts, and insights. Identify weak areas and improve.',
       gradient: 'gradient-5'
     },
     {
-      icon: '📄',
       title: 'Resume Analyzer',
       description: 'AI-powered resume analysis tool that provides feedback on your resume and suggests improvements.',
       gradient: 'gradient-6'
@@ -45,27 +39,27 @@ export default function Landing() {
 
   const benefits = [
     {
-      title: '🚀 Fast Track Your Career',
+      title: ' Fast Track Your Career',
       description: 'Prepare comprehensively for placements with structured learning paths and targeted practice.'
     },
     {
-      title: '📚 Extensive Content Library',
+      title: ' Extensive Content Library',
       description: 'Access thousands of problems and questions carefully curated by industry experts.'
     },
     {
-      title: '🏆 Proven Success',
+      title: ' Proven Success',
       description: 'Our users have successfully placed at top companies with competitive packages.'
     },
     {
-      title: '💬 Community Support',
+      title: ' Community Support',
       description: 'Learn and grow with a community of like-minded students preparing for placements.'
     },
     {
-      title: '🔄 Real-time Feedback',
+      title: 'Real-time Feedback',
       description: 'Get instant feedback on your performance and actionable insights to improve.'
     },
     {
-      title: '📱 Learn Anywhere',
+      title: ' Learn Anywhere',
       description: 'Responsive design allows you to practice anytime, anywhere on any device.'
     }
   ];
@@ -76,7 +70,7 @@ export default function Landing() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="nav-logo">
-            <span className="logo-icon">🚀</span>
+            <span className="logo-icon"></span>
             <span className="logo-text">SmartPlace</span>
           </div>
           <div className="nav-buttons">
@@ -122,11 +116,6 @@ export default function Landing() {
             >
               Learn More ↓
             </button>
-          </div>
-        </div>
-        <div className="hero-visual">
-          <div className="hero-illustration">
-            <span className="illustration-icon">💼</span>
           </div>
         </div>
       </section>
@@ -178,19 +167,19 @@ export default function Landing() {
               <h3>Create Account</h3>
               <p>Sign up with your email and create your profile. It takes just 2 minutes!</p>
             </div>
-            <div className="step-divider">→</div>
+              <div className="step-divider">Then</div>
             <div className="step-card">
               <div className="step-number">2</div>
               <h3>Choose Your Path</h3>
               <p>Select your preparation focus: Coding, Aptitude, or Mock Tests.</p>
             </div>
-            <div className="step-divider">→</div>
+              <div className="step-divider">Then</div>
             <div className="step-card">
               <div className="step-number">3</div>
               <h3>Practice & Learn</h3>
               <p>Solve problems, take quizzes, and track your progress daily.</p>
             </div>
-            <div className="step-divider">→</div>
+              <div className="step-divider">Then</div>
             <div className="step-card">
               <div className="step-number">4</div>
               <h3>Succeed</h3>

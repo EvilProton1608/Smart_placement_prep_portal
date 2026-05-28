@@ -1,4 +1,5 @@
 const prisma = require("../config/db");
+const { computeAndUpsertUserProgress } = require("../services/userProgressService");
 
 // Get all coding questions
 exports.getAllQuestions = async (req, res) => {
@@ -199,7 +200,7 @@ exports.getAptitudeQuestion = async (req, res) => {
 // Submit aptitude answer and check
 exports.submitAptitudeAnswer = async (req, res) => {
   try {
-    const { questionId, selectedAnswer, userId } = req.body;
+    const { questionId, selectedAnswer } = req.body;
 
     if (!questionId || !selectedAnswer) {
       return res.status(400).json({
@@ -219,18 +220,18 @@ exports.submitAptitudeAnswer = async (req, res) => {
 
     const isCorrect = selectedAnswer === question.correctAnswer;
 
-    // Record the attempt if userId is provided
-    if (userId) {
-      await prisma.quizAttempt.create({
-        data: {
-          userId: parseInt(userId),
-          questionId: parseInt(questionId),
-          selectedAnswer: selectedAnswer,
-          isCorrect: isCorrect,
-          timeTaken: 0
-        }
-      });
-    }
+    // Record the attempt for the authenticated user
+    await prisma.quizAttempt.create({
+      data: {
+        userId: req.user.id,
+        questionId: parseInt(questionId),
+        selectedAnswer: selectedAnswer,
+        isCorrect: isCorrect,
+        timeTaken: 0
+      }
+    });
+
+    await computeAndUpsertUserProgress(req.user.id);
 
     res.json({
       success: true,

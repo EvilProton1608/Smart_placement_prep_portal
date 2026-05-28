@@ -1,6 +1,6 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import "../styles/Auth.css";
 
 export default function GitHubCallback() {
@@ -16,7 +16,7 @@ export default function GitHubCallback() {
         const state = searchParams.get("state");
 
         if (!code) {
-          setError("❌ No authorization code received from GitHub");
+          setError(" No authorization code received from GitHub");
           setLoading(false);
           return;
         }

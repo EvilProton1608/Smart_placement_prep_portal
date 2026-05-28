@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Profile.css';
 
@@ -9,6 +9,10 @@ export default function EditProfile() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selectedPhotoPreviewUrl, setSelectedPhotoPreviewUrl] = useState('');
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -30,6 +34,7 @@ export default function EditProfile() {
         });
 
         if (response.data) {
+          setProfilePhotoUrl(response.data.profilePhotoUrl || '');
           setFormData({
             name: response.data.name || '',
             branch: response.data.branch || '',
@@ -48,6 +53,26 @@ export default function EditProfile() {
 
     fetchProfile();
   }, []);
+
+  useEffect(() => {
+    if (!selectedPhoto) {
+      setSelectedPhotoPreviewUrl('');
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedPhoto);
+    setSelectedPhotoPreviewUrl(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [selectedPhoto]);
+
+  const photoPreviewUrl = useMemo(() => {
+    if (selectedPhotoPreviewUrl) return selectedPhotoPreviewUrl;
+    if (profilePhotoUrl) return `http://localhost:5000${profilePhotoUrl}`;
+    return '';
+  }, [profilePhotoUrl, selectedPhotoPreviewUrl]);
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -92,7 +117,7 @@ export default function EditProfile() {
         }
       );
 
-      setSuccess('✅ Profile updated successfully!');
+      setSuccess(' Profile updated successfully!');
       setTimeout(() => {
         navigate('/profile');
       }, 1500);
@@ -104,6 +129,46 @@ export default function EditProfile() {
     }
   };
 
+  const handlePhotoChange = useCallback((e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError('');
+    setSuccess('');
+    setSelectedPhoto(file);
+  }, []);
+
+  const handleUploadPhoto = useCallback(async () => {
+    if (!selectedPhoto) {
+      setError('Please choose a photo to upload.');
+      return;
+    }
+
+    try {
+      setError('');
+      setSuccess('');
+      setUploadingPhoto(true);
+
+      const form = new FormData();
+      form.append('photo', selectedPhoto);
+
+      const res = await axios.post('http://localhost:5000/api/user/profile-photo', form, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      const newUrl = res.data?.user?.profilePhotoUrl || '';
+      setProfilePhotoUrl(newUrl);
+      setSelectedPhoto(null);
+      setSuccess('Profile photo updated successfully!');
+    } catch (err) {
+      console.error('Error uploading profile photo:', err);
+      setError(err.response?.data?.message || 'Failed to upload photo. Please try again.');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  }, [selectedPhoto]);
+
   if (loading) {
     return <div className="profile-loading">Loading profile...</div>;
   }
@@ -112,13 +177,13 @@ export default function EditProfile() {
     <div className="profile-page">
       <div className="profile-container">
         <div className="page-header">
-          <h1>✏️ Edit Profile</h1>
+          <h1>Edit Profile</h1>
           <button
             type="button"
             className="btn-back"
             onClick={() => navigate('/profile')}
           >
-            ← Back
+            Back
           </button>
         </div>
 
@@ -126,6 +191,58 @@ export default function EditProfile() {
         {success && <div className="alert alert-success">{success}</div>}
 
         <form className="edit-form" onSubmit={handleSubmit}>
+          <section className="form-section">
+            <h3>Profile Photo</h3>
+
+            <div className="form-row" style={{ alignItems: 'center' }}>
+              <div className="profile-avatar" style={{ marginRight: 20 }}>
+                {photoPreviewUrl ? (
+                  <img
+                    src={photoPreviewUrl}
+                    alt="Profile"
+                    className="avatar-placeholder"
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div className="avatar-placeholder">
+                    {formData?.name ? formData.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group" style={{ flex: 1 }}>
+                <label htmlFor="profilePhoto">Upload Photo</label>
+                <input
+                  id="profilePhoto"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="form-input"
+                />
+                <small className="form-hint">JPG/PNG/WebP, up to 5MB</small>
+
+                <div className="form-actions" style={{ justifyContent: 'flex-start', paddingTop: 12 }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleUploadPhoto}
+                    disabled={uploadingPhoto || !selectedPhoto}
+                  >
+                    {uploadingPhoto ? 'Uploading...' : 'Upload Photo'}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setSelectedPhoto(null)}
+                    disabled={uploadingPhoto || !selectedPhoto}
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section className="form-section">
             <h3>Personal Information</h3>
 
@@ -223,7 +340,7 @@ export default function EditProfile() {
               className="btn btn-primary"
               disabled={submitting}
             >
-              {submitting ? '💾 Saving...' : '💾 Save Changes'}
+              {submitting ? ' Saving...' : ' Save Changes'}
             </button>
             <button
               type="button"
@@ -231,7 +348,7 @@ export default function EditProfile() {
               onClick={() => navigate('/profile')}
               disabled={submitting}
             >
-              ✕ Cancel
+              Cancel
             </button>
           </div>
         </form>

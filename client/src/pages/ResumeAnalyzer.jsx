@@ -66,7 +66,7 @@ export default function ResumeAnalyzer() {
 		<div className="resume-page">
 			<div className="resume-container">
 				<div className="resume-header">
-					<h1 className="resume-title">📄 Resume Analyzer</h1>
+					<h1 className="resume-title"> Resume Analyzer</h1>
 					<p className="resume-subtitle">
 						Upload your resume to get an ATS score and improvement suggestions.
 					</p>

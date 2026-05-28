@@ -307,11 +307,17 @@
   min-width: 20px;
 }
 
-.option-text {
+/* Scope these under .aptitude-page to avoid clashes with other pages (e.g. Mocktest.css also defines .option-text) */
+.aptitude-page .option-text {
   font-size: 15px;
   color: #333;
   line-height: 1.5;
   word-break: break-word;
+  visibility: visible;
+}
+
+.aptitude-page .option-item.selected .option-text {
+  color: #111827;
 }
 
 /* Feedback Section */
@@ -389,6 +395,43 @@
   gap: 12px;
   padding-top: 20px;
   border-top: 2px solid #e5e7eb;
+}
+
+/* Sticky bottom actions (Submit / Next / Prev / Finish) */
+.aptitude-actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  margin-top: 10px;
+  border-top: 2px solid #e5e7eb;
+  background: white;
+  z-index: 5;
+  flex-wrap: wrap;
+}
+
+.finish-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.finish-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.finish-btn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
 }
 
 .submit-btn {

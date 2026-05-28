@@ -1,5 +1,6 @@
 const axios = require("axios");
 const prisma = require("../config/db");
+const { computeAndUpsertUserProgress } = require("../services/userProgressService");
 
 // Judge0 API Configuration - Free API (no subscription needed)
 const JUDGE0_API = "https://ce.judge0.com";
@@ -97,10 +98,86 @@ const getJudge0Result = async (token) => {
   }
 };
 
+const normalizeOutput = (text) =>
+  String(text ?? "")
+    .replace(/\r\n/g, "\n")
+    .trim();
+
+const formatTestCase = (testCase, index) => ({
+  testId: index + 1,
+  dbTestCaseId: testCase.id,
+  description: testCase.description || `Test case ${index + 1}`,
+  input: testCase.input || "",
+  expected: testCase.expectedOutput ?? testCase.expected ?? "",
+});
+
+const evaluateAgainstTestCases = async ({ code, language, testCases }) => {
+  if (!Array.isArray(testCases) || testCases.length === 0) {
+    return { status: "submitted", results: [] };
+  }
+
+  if (!LANGUAGE_MAP[language]) {
+    return { status: "failed", results: [{ status: "error", message: "Unsupported language" }] };
+  }
+
+  const results = [];
+  for (let index = 0; index < testCases.length; index++) {
+    const tc = formatTestCase(testCases[index], index);
+
+    try {
+      const token = await submitToJudge0(code, LANGUAGE_MAP[language], tc.input);
+      const run = await getJudge0Result(token);
+
+      if (!run.success) {
+        results.push({
+          ...tc,
+          status: "error",
+          message: run.stderr || run.status || "Execution error",
+          output: run.output || "",
+        });
+        continue;
+      }
+
+      const got = normalizeOutput(run.output);
+      const expected = normalizeOutput(tc.expected);
+
+      if (got !== expected) {
+        results.push({
+          ...tc,
+          status: "fail",
+          output: run.output || "",
+          message: "Output does not match expected result",
+        });
+        continue;
+      }
+
+      results.push({
+        ...tc,
+        status: "pass",
+        output: run.output || "",
+        message: "",
+      });
+    } catch (err) {
+      results.push({
+        ...tc,
+        status: "error",
+        output: "",
+        message: err.message || "Execution error",
+      });
+    }
+  }
+
+  const status = results.every((result) => result.status === "pass")
+    ? "passed"
+    : "failed";
+
+  return { status, results };
+};
+
 // Execute code using Judge0 API
 exports.executeCode = async (req, res) => {
   try {
-    const { code, language, stdin = "" } = req.body;
+    const { code, language, stdin = "", testCases = [] } = req.body;
 
     if (!code || !language) {
       return res.status(400).json({
@@ -116,6 +193,25 @@ exports.executeCode = async (req, res) => {
     }
 
     try {
+      if (Array.isArray(testCases) && testCases.length > 0) {
+        const evaluation = await evaluateAgainstTestCases({
+          code,
+          language,
+          testCases,
+        });
+
+        const passed = evaluation.results.filter((result) => result.status === "pass").length;
+        const total = evaluation.results.length;
+
+        return res.json({
+          success: evaluation.status === "passed",
+          output: `${passed}/${total} test cases passed`,
+          message: evaluation.status === "passed" ? "" : "Some test cases failed",
+          status: evaluation.status,
+          evaluation,
+        });
+      }
+
       // Submit code to Judge0
       const token = await submitToJudge0(code, LANGUAGE_MAP[language], stdin);
       
@@ -157,20 +253,44 @@ exports.submitCode = async (req, res) => {
       });
     }
 
+    const question = await prisma.question.findUnique({
+      where: { id: parseInt(questionId) },
+      include: { testCases: true }
+    });
+
+    if (!question) {
+      return res.status(404).json({
+        success: false,
+        message: "Question not found"
+      });
+    }
+
+    const evaluation = await evaluateAgainstTestCases({
+      code,
+      language,
+      testCases: question.testCases
+    });
+
     const submission = await prisma.codingSubmission.create({
       data: {
         userId: req.user.id,
-        questionId,
+        questionId: parseInt(questionId),
         code,
         language,
-        status: "submitted"
+        status: evaluation.status
       }
     });
+
+    await computeAndUpsertUserProgress(req.user.id);
 
     res.json({
       success: true,
       message: "Code submitted successfully",
-      submission
+      submission,
+      evaluation: {
+        status: evaluation.status,
+        results: evaluation.results
+      }
     });
   } catch (err) {
     res.status(500).json({

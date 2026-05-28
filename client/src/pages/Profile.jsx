@@ -63,9 +63,18 @@ export default function Profile() {
         {/* Header Section */}
         <div className="profile-header">
           <div className="profile-avatar">
-            <div className="avatar-placeholder">
-              {profileData?.name ? profileData.name.charAt(0).toUpperCase() : 'U'}
-            </div>
+            {profileData?.profilePhotoUrl ? (
+              <img
+                src={`http://localhost:5000${profileData.profilePhotoUrl}`}
+                alt="Profile"
+                className="avatar-placeholder"
+                style={{ objectFit: 'cover' }}
+              />
+            ) : (
+              <div className="avatar-placeholder">
+                {profileData?.name ? profileData.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+            )}
           </div>
           <div className="profile-name-section">
             <h1 className="profile-name">{profileData?.name || 'User'}</h1>
@@ -76,13 +85,13 @@ export default function Profile() {
               className="btn btn-primary"
               onClick={() => navigate('/edit-profile')}
             >
-              ✏️ Edit Profile
+               Edit Profile
             </button>
             <button 
               className="btn btn-secondary"
               onClick={() => navigate('/change-password')}
             >
-              🔒 Change Password
+               Change Password
             </button>
           </div>
         </div>
@@ -91,7 +100,7 @@ export default function Profile() {
         <div className="profile-content">
           {/* Personal Information Card */}
           <div className="profile-card">
-            <h2 className="card-title">👤 Personal Information</h2>
+            <h2 className="card-title"> Personal Information</h2>
             <div className="card-content">
               <div className="info-row">
                 <label>Full Name:</label>
@@ -118,7 +127,7 @@ export default function Profile() {
 
           {/* Education Information Card */}
           <div className="profile-card">
-            <h2 className="card-title">🎓 Education Details</h2>
+            <h2 className="card-title"> Education Details</h2>
             <div className="card-content">
               <div className="info-row">
                 <label>Branch:</label>
@@ -143,7 +152,7 @@ export default function Profile() {
 
           {/* Career Information Card */}
           <div className="profile-card">
-            <h2 className="card-title">💼 Career Information</h2>
+            <h2 className="card-title"> Career Information</h2>
             <div className="card-content">
               {profileData?.targetCompanies && profileData.targetCompanies.length > 0 ? (
                 <div className="info-row">
@@ -179,7 +188,7 @@ export default function Profile() {
 
           {/* Account Information Card */}
           <div className="profile-card">
-            <h2 className="card-title">🔐 Account Information</h2>
+            <h2 className="card-title"> Account Information</h2>
             <div className="card-content">
               <div className="info-row">
                 <label>Account Status:</label>
@@ -211,19 +220,19 @@ export default function Profile() {
             className="btn btn-primary-lg"
             onClick={() => navigate('/edit-profile')}
           >
-            ✏️ Edit All Details
+            Edit All Details
           </button>
           <button 
             className="btn btn-secondary-lg"
             onClick={() => navigate('/change-password')}
           >
-            🔒 Change Password
+             Change Password
           </button>
           <button 
             className="btn btn-tertiary"
             onClick={() => navigate('/dashboard')}
           >
-            ← Back to Dashboard
+            Back to Dashboard
           </button>
         </div>
       </div>

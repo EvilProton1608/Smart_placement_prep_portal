@@ -54,7 +54,7 @@ export default function Login() {
 
       if (res.data && res.data.token) {
         login(res.data.token);
-        setSuccess("✓ Login successful! Redirecting...");
+        setSuccess("Login successful! Redirecting...");
         setForm({ email: "", password: "" });
 
         setTimeout(() => {
@@ -63,7 +63,7 @@ export default function Login() {
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";
-      setError(`❌ ${errorMessage}`);
+      setError(` ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -79,7 +79,7 @@ export default function Login() {
 
       if (response.data && response.data.token) {
         login(response.data.token);
-        setSuccess("✓ Google login successful! Redirecting...");
+        setSuccess("Google login successful! Redirecting...");
 
         setTimeout(() => {
           navigate("/dashboard");
@@ -88,14 +88,14 @@ export default function Login() {
     } catch (err) {
       console.error("Google auth error:", err);
       const errorMessage = err.response?.data?.message || "Google authentication failed";
-      setError(`❌ ${errorMessage}`);
+      setError(` ${errorMessage}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    setError("❌ Google login failed");
+    setError(" Google login failed");
   };
 
   const handleGitHubLogin = () => {

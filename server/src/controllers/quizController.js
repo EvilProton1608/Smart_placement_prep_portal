@@ -1,4 +1,5 @@
 const prisma = require("../config/db");
+const { computeAndUpsertUserProgress } = require("../services/userProgressService");
 
 exports.getQuestions = async (req, res) => {
   const questions = await prisma.question.findMany({
@@ -25,6 +26,8 @@ exports.submitAnswer = async (req, res) => {
       timeTaken
     }
   });
+
+  await computeAndUpsertUserProgress(req.user.id);
 
   res.json({ correct });
 };

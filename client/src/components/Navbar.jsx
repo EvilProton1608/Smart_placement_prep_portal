@@ -39,7 +39,7 @@ export default function Navbar({ onMenuClick, sidebarOpen }) {
 
         {/* Logo */}
         <div className="navbar-logo">
-          <span className="logo-icon">🎯</span>
+          <span className="logo-icon"></span>
           <a href="/dashboard" className="logo-text">
             SmartPlace
           </a>
@@ -56,27 +56,27 @@ export default function Navbar({ onMenuClick, sidebarOpen }) {
         <ul className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
           <li className="nav-item">
             <a href="/dashboard" className="nav-link">
-              📊 Dashboard
+              Dashboard
             </a>
           </li>
           <li className="nav-item">
             <a href="/coding" className="nav-link">
-              💻 Coding
+               Coding
             </a>
           </li>
           <li className="nav-item">
             <a href="/aptitude" className="nav-link">
-              📝 Aptitude
+               Aptitude
             </a>
           </li>
           <li className="nav-item">
             <a href="/analytics" className="nav-link">
-              📈 Analytics
+              Analytics
             </a>
           </li>
           <li className="nav-item">
             <a href="/mocktest" className="nav-link">
-              🎯 Mock Tests
+               Mock Tests
             </a>
           </li>
         </ul>
@@ -94,24 +94,24 @@ export default function Navbar({ onMenuClick, sidebarOpen }) {
               </span>
               <span className="user-name">{user?.name || 'User'}</span>
               <span className={`dropdown-arrow ${dropdownOpen ? 'open' : ''}`}>
-                ▼
+                v
               </span>
             </button>
 
             {/* Dropdown Menu */}
             <div className={`dropdown-menu ${dropdownOpen ? 'active' : ''}`}>
               <a href="/profile" className="dropdown-item">
-                👤 My Profile
+                 My Profile
               </a>
               <a href="/edit-profile" className="dropdown-item">
-                ✏️ Edit Profile
+                Edit Profile
               </a>
               <a href="/change-password" className="dropdown-item">
-                🔒 Change Password
+                 Change Password
               </a>
               <div className="dropdown-divider"></div>
               <button onClick={handleLogout} className="dropdown-item logout-btn">
-                🚪 Logout
+                 Logout
               </button>
             </div>
           </div>

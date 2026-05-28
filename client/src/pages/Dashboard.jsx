@@ -57,7 +57,6 @@ export default function Dashboard() {
     {
       id: 1,
       title: 'Coding Practice',
-      icon: '💻',
       description: 'Solve coding problems and improve your programming skills',
       path: '/coding',
       color: '#667eea'
@@ -65,7 +64,6 @@ export default function Dashboard() {
     {
       id: 2,
       title: 'Aptitude Tests',
-      icon: '📊',
       description: 'Practice aptitude questions for campus placements',
       path: '/aptitude',
       color: '#764ba2'
@@ -73,7 +71,6 @@ export default function Dashboard() {
     {
       id: 3,
       title: 'Mock Tests',
-      icon: '🎯',
       description: 'Take full-length mock tests to assess your readiness',
       path: '/mocktest',
       color: '#f093fb'
@@ -81,7 +78,6 @@ export default function Dashboard() {
     {
       id: 4,
       title: 'Quiz Mode',
-      icon: '❓',
       description: 'Quick quizzes to test your knowledge on various topics',
       path: '/',
       color: '#f5576c'
@@ -112,7 +108,7 @@ export default function Dashboard() {
         {/* Welcome Section */}
         <div className="welcome-section">
           <div className="welcome-greeting">
-            <h1>Welcome Back, {userData?.name?.split(' ')[0]}! 👋</h1>
+            <h1>Welcome Back, {userData?.name?.split(' ')[0]}! </h1>
             <p>Ready to ace your placements? Let's get started!</p>
           </div>
           <div className="welcome-avatar">
@@ -127,7 +123,7 @@ export default function Dashboard() {
           <h2>Your Progress</h2>
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-icon">📝</div>
+              <div className="stat-icon"></div>
               <div className="stat-content">
                 <p className="stat-label">Problems Solved</p>
                 <p className="stat-value">{stats.totalProblems}</p>
@@ -135,7 +131,7 @@ export default function Dashboard() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">🎯</div>
+              <div className="stat-icon"></div>
               <div className="stat-content">
                 <p className="stat-label">Accuracy</p>
                 <p className="stat-value">{stats.accuracy}%</p>
@@ -143,7 +139,7 @@ export default function Dashboard() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">🔥</div>
+              <div className="stat-icon"></div>
               <div className="stat-content">
                 <p className="stat-label">Current Streak</p>
                 <p className="stat-value">{stats.currentStreak} days</p>
@@ -151,7 +147,7 @@ export default function Dashboard() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">🏆</div>
+              <div className="stat-icon"></div>
               <div className="stat-content">
                 <p className="stat-label">Tests Completed</p>
                 <p className="stat-value">{stats.testsCompleted}</p>
@@ -174,7 +170,7 @@ export default function Dashboard() {
                 <div className="module-icon">{module.icon}</div>
                 <h3>{module.title}</h3>
                 <p>{module.description}</p>
-                <button className="module-btn">Start Now →</button>
+                <button className="module-btn">Start Now</button>
               </div>
             ))}
           </div>
@@ -183,7 +179,7 @@ export default function Dashboard() {
         {/* Motivational Tip */}
         <div className="tips-section">
           <div className="tip-card">
-            <div className="tip-icon">💡</div>
+            <div className="tip-icon"></div>
             <div className="tip-content">
               <h3>Daily Tip for Success</h3>
               <p>{randomTip}</p>
@@ -199,25 +195,25 @@ export default function Dashboard() {
               className="quick-link-btn"
               onClick={() => navigate('/profile')}
             >
-              👤 My Profile
+               My Profile
             </button>
             <button 
               className="quick-link-btn"
               onClick={() => navigate('/analytics')}
             >
-              📈 My Analytics
+               My Analytics
             </button>
             <button 
               className="quick-link-btn"
               onClick={() => navigate('/edit-profile')}
             >
-              ✏️ Edit Profile
+               Edit Profile
             </button>
             <button 
               className="quick-link-btn"
               onClick={() => navigate('/change-password')}
             >
-              🔒 Change Password
+               Change Password
             </button>
           </div>
         </div>

@@ -1,9 +1,23 @@
 const prisma = require("../config/db");
 const bcryptjs = require("bcryptjs");
+const { computeAndUpsertUserProgress } = require("../services/userProgressService");
+
+const PROFILE_SELECT = {
+  id: true,
+  name: true,
+  email: true,
+  profilePhotoUrl: true,
+  branch: true,
+  college: true,
+  graduationYear: true,
+  targetCompanies: true,
+  createdAt: true
+};
 
 exports.getProfile = async (req, res) => {
   const user = await prisma.user.findUnique({
-    where: { id: req.user.id }
+    where: { id: req.user.id },
+    select: PROFILE_SELECT
   });
   res.json(user);
 };
@@ -11,49 +25,25 @@ exports.getProfile = async (req, res) => {
 exports.getAnalytics = async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
-
-    // Get all quiz attempts for the user
-    const attempts = await prisma.quizAttempt.findMany({
-      where: { userId },
-      include: {
-        question: {
-          select: {
-            id: true,
-            title: true,
-            type: true
-          }
-        }
-      },
-      orderBy: { attemptedAt: 'desc' }
+    const payload = await buildAnalyticsPayload(userId);
+    res.json(payload);
+  } catch (error) {
+    console.error('Error fetching analytics:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching analytics',
+      error: error.message
     });
+  }
+};
 
-    // Calculate overall stats
-    const totalAttempts = attempts.length;
-    const correctAnswers = attempts.filter(a => a.isCorrect).length;
-    const accuracy = totalAttempts > 0 ? (correctAnswers / totalAttempts) * 100 : 0;
-
-    // Separate by type
-    const codingAttempts = attempts.filter(a => a.question?.type === 'coding');
-    const aptitudeAttempts = attempts.filter(a => a.question?.type === 'aptitude');
-
-    const codingCorrect = codingAttempts.filter(a => a.isCorrect).length;
-    const aptitudeCorrect = aptitudeAttempts.filter(a => a.isCorrect).length;
-
-    const codingAccuracy = codingAttempts.length > 0 ? (codingCorrect / codingAttempts.length) * 100 : 0;
-    const aptitudeAccuracy = aptitudeAttempts.length > 0 ? (aptitudeCorrect / aptitudeAttempts.length) * 100 : 0;
-
+exports.getMyAnalytics = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const progress = await computeAndUpsertUserProgress(userId);
     res.json({
       success: true,
-      stats: {
-        totalAttempts,
-        correctAnswers,
-        accuracy,
-        codingAttempts: codingAttempts.length,
-        aptitudeAttempts: aptitudeAttempts.length,
-        codingAccuracy,
-        aptitudeAccuracy
-      },
-      attempts: attempts.slice(0, 20) // Return last 20 attempts
+      progress
     });
   } catch (error) {
     console.error('Error fetching analytics:', error);
@@ -64,6 +54,81 @@ exports.getAnalytics = async (req, res) => {
     });
   }
 };
+
+async function buildAnalyticsPayload(userId) {
+  const [quizAttempts, codingSubs] = await Promise.all([
+    prisma.quizAttempt.findMany({
+      where: { userId },
+      include: {
+        question: {
+          select: {
+            id: true,
+            title: true,
+            type: true
+          }
+        }
+      },
+      orderBy: { attemptedAt: "desc" }
+    }),
+    prisma.codingSubmission.findMany({
+      where: { userId },
+      include: {
+        question: {
+          select: {
+            id: true,
+            title: true,
+            type: true
+          }
+        }
+      },
+      orderBy: { submittedAt: "desc" }
+    })
+  ]);
+
+  const aptitudeAttempts = quizAttempts.filter((a) => a.question?.type === "aptitude");
+  const aptitudeCorrect = aptitudeAttempts.filter((a) => a.isCorrect).length;
+  const aptitudeAccuracy = aptitudeAttempts.length > 0 ? (aptitudeCorrect / aptitudeAttempts.length) * 100 : 0;
+
+  const codingAttemptsCount = codingSubs.length;
+  const codingCorrect = codingSubs.filter((s) => s.status === "passed").length;
+  const codingAccuracy = codingAttemptsCount > 0 ? (codingCorrect / codingAttemptsCount) * 100 : 0;
+
+  const totalAttempts = aptitudeAttempts.length + codingAttemptsCount;
+  const correctAnswers = aptitudeCorrect + codingCorrect;
+  const accuracy = totalAttempts > 0 ? (correctAnswers / totalAttempts) * 100 : 0;
+
+  const mergedAttempts = [
+    ...quizAttempts.map((a) => ({
+      attemptedAt: a.attemptedAt,
+      isCorrect: a.isCorrect,
+      question: a.question
+    })),
+    ...codingSubs.map((s) => ({
+      attemptedAt: s.submittedAt,
+      isCorrect: s.status === "passed",
+      question: s.question
+    }))
+  ]
+    .sort((a, b) => new Date(b.attemptedAt).getTime() - new Date(a.attemptedAt).getTime())
+    .slice(0, 20);
+
+  const progress = await computeAndUpsertUserProgress(userId);
+
+  return {
+    success: true,
+    stats: {
+      totalAttempts,
+      correctAnswers,
+      accuracy,
+      codingAttempts: codingAttemptsCount,
+      aptitudeAttempts: aptitudeAttempts.length,
+      codingAccuracy,
+      aptitudeAccuracy
+    },
+    progress,
+    attempts: mergedAttempts
+  };
+}
 
 exports.updateProfile = async (req, res) => {
   try {
@@ -78,7 +143,8 @@ exports.updateProfile = async (req, res) => {
         college: college || null,
         graduationYear: graduationYear ? parseInt(graduationYear) : null,
         targetCompanies: Array.isArray(targetCompanies) ? targetCompanies : []
-      }
+      },
+      select: PROFILE_SELECT
     });
 
     res.json({
@@ -91,6 +157,39 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error updating profile',
+      error: error.message
+    });
+  }
+};
+
+exports.updateProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No photo uploaded"
+      });
+    }
+
+    const userId = req.user.id;
+    const profilePhotoUrl = `/uploads/${req.file.filename}`;
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { profilePhotoUrl },
+      select: PROFILE_SELECT
+    });
+
+    res.json({
+      success: true,
+      message: "Profile photo updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Error updating profile photo:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating profile photo",
       error: error.message
     });
   }

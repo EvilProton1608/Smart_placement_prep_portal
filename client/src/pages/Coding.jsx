@@ -119,16 +119,16 @@ export default function CodingPage() {
                     <h3>Test Results</h3>
                     <div className="results-summary">
                       <span className={`result-badge pass`}>
-                        ✓ {testResults.filter(r => r.status === 'pass').length} Passed
+                        {testResults.filter(r => r.status === 'pass').length} Passed
                       </span>
                       <span className={`result-badge fail`}>
-                        ✗ {testResults.filter(r => r.status === 'fail').length} Failed
+                        {testResults.filter(r => r.status === 'fail').length} Failed
                       </span>
                       <span className={`result-badge error`}>
-                        ⚠ {testResults.filter(r => r.status === 'error').length} Error
+                        {testResults.filter(r => r.status === 'error').length} Error
                       </span>
                       <span className={`result-badge timeout`}>
-                        ⏱ {testResults.filter(r => r.status === 'timeout').length} Timeout
+                        {testResults.filter(r => r.status === 'timeout').length} Timeout
                       </span>
                     </div>
                   </div>
@@ -136,10 +136,6 @@ export default function CodingPage() {
                     {testResults.map((result, idx) => (
                       <div key={idx} className={`result-item ${result.status}`}>
                         <div className="result-status">
-                      {result.status === 'pass' && '✓'}
-                      {result.status === 'fail' && '✗'}
-                      {result.status === 'error' && '⚠'}
-                      {result.status === 'timeout' && '⏱'}
                       <span className="status-label">{result.status.toUpperCase()}</span>
                     </div>
                     <div className="result-case">
